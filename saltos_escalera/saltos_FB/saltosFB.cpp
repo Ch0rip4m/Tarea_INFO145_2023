@@ -1,52 +1,76 @@
 #include <iostream>
 #include <cmath>
+#include <chrono>
+#include <cstdlib>
+#include <set>
 using namespace std;
 
 // Función recursiva para contar las formas posibles de subir la escalera sin pisar escalones rotos
-int contarFormasFuerzaBruta(int E[], int n, int p) {
-    // Si ya estamos en el último escalón, retornamos 1 para indicar que se alcanzó el objetivo
-    if (n == 1)
+long int contarFormasFuerzaBruta(int E[], int n, int p) {
+    if (n == 0) {
         return 1;
+    }
     
     int formas = 0;
     
-    // Iteramos sobre las posibles potencias de salto
-    for (int i = 0; pow(p, i) <= n; i++) {
+    // Iterar sobre todas las posibles combinaciones de saltos
+    for (int i = 0; i <= n; i++) {
+        // Verificar si el salto es una potencia de p menor o igual a n
         int salto = pow(p, i);
+        if (salto > n) {
+            break;
+        }
         
-        // Si el salto no pisa un escalón roto, llamamos recursivamente para el siguiente escalón
-        if (n - salto >= 1 && E[n - salto] != -1)
+        // Verificar si el salto no pisa un escalón roto
+        if (E[n - salto] != -1) {
             formas += contarFormasFuerzaBruta(E, n - salto, p);
+        }
     }
     
     return formas;
 }
-
-
-int main(int argc, char* argv[]) {
-    int n = atoi(argv[1]);  // Número de escalones
-    int r = atoi(argv[2]);  // Número de escalones rotos
-    int p = atoi(argv[3]);  // Potencia de salto de Super Mario
     
-    int E[n + 1]; 
-    
+
+int main(int argc, char *argv[])
+{
+    srand(time(NULL));
+
+    int n = atoi(argv[1]); // Número de escalones
+    int r = atoi(argv[2]); // Número de escalones rotos
+    int p = atoi(argv[3]); // Potencia de salto de Super Mario
+
+    int E[n + 1];
+    set<int> escalones_rotos;
+
     // Inicializar el array de escalones rotos
     for (int i = 0; i <= n; i++)
         E[i] = 0;
-    
+
     // Marcar los escalones rotos
-    for (int i = 0; i < r; i++) {
-        int roto;
-        cout << "Ingrese el escalón roto: ";
-        cin >> roto;
-        E[roto] = -1;
+    while (escalones_rotos.size() < r)
+    {
+        int roto = 1 + rand() % n;
+        if (escalones_rotos.find(roto) == escalones_rotos.end())
+        {
+            escalones_rotos.insert(roto);
+            cout << "ESCALÓN N° "<< roto << " ROTO" << endl;
+            //cout << "Ingrese el escalón roto: ";
+            //cin >> roto;
+            E[roto] = -1;
+        }
     }
-    
-    
-    int formasFuerzaBruta = contarFormasFuerzaBruta(E, n, p);
-    
+    auto tiempo_inicial = chrono::high_resolution_clock::now();
+
+    long int formas_FB = contarFormasFuerzaBruta(E, n, p);
+
+    auto tiempo_final = chrono::high_resolution_clock::now();
+
+    chrono::duration<double> duracion = tiempo_final - tiempo_inicial;
+    double tiempo_total = duracion.count();
+
     // Mostrar el resultado
-    cout << "NÚMERO DE FORMAS POSIBLES: " << formasFuerzaBruta << endl;
-    
+    cout << "NÚMERO DE FORMAS POSIBLES: " << formas_FB << endl;
+    cout << "TIEMPO DE EJECUCIÓN: " << tiempo_total << "[s]" << endl;
+
     return 0;
 }
