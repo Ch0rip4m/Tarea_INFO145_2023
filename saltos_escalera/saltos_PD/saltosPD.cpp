@@ -6,7 +6,7 @@
 using namespace std;
 
 // Función para contar las formas posibles de subir la escalera sin pisar escalones rotos
-long int contarFormasDinamica(int E[], int n, int p) {
+long long int contarFormasDinamica(int E[], int n, int p) {
     int formas[n + 1];
     formas[0] = 1;
     
@@ -15,8 +15,8 @@ long int contarFormasDinamica(int E[], int n, int p) {
         formas[i] = 0;
         
         // Iterar sobre las posibles potencias de salto
-        for (int j = 0; pow(p, j) <= i; j++) {
-            int salto = pow(p, j);
+        for (int k = 0; pow(p, k) <= i; k++) {
+            int salto = pow(p, k);
             
             // Si el salto no pisa un escalón roto, sumar las formas posibles anteriores
             if (E[i - salto] != -1)
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
 
     auto tiempo_inicial = chrono::high_resolution_clock::now();
     
-    long int formas_PD = contarFormasDinamica(E, n, p);
+    long long int formas_PD = contarFormasDinamica(E, n, p);
 
     auto tiempo_final = chrono::high_resolution_clock::now();
     
@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
     
     // Mostrar el resultado
     cout << "NÚMERO DE FORMAS POSIBLES:  " << formas_PD << endl;
-    cout << "TIEMPO DE EJECUCIÓN: " << tiempo_total << "[s]" << endl;
+    cout << "TIEMPO DE EJECUCIÓN: " << tiempo_total << " [s]" << endl;
     
     return 0;
 }

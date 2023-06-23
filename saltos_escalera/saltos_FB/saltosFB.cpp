@@ -6,7 +6,7 @@
 using namespace std;
 
 // Función recursiva para contar las formas posibles de subir la escalera sin pisar escalones rotos
-long int contarFormasFuerzaBruta(int E[], int n, int p) {
+long long int contarFormasFuerzaBruta(int E[], int n, int p) {
     if (n == 0) {
         return 1;
     }
@@ -14,9 +14,9 @@ long int contarFormasFuerzaBruta(int E[], int n, int p) {
     int formas = 0;
     
     // Iterar sobre todas las posibles combinaciones de saltos
-    for (int i = 0; i <= n; i++) {
+    for (int k = 0; k <= n; k++) {
         // Verificar si el salto es una potencia de p menor o igual a n
-        int salto = pow(p, i);
+        int salto = pow(p, k);
         if (salto > n) {
             break;
         }
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     }
     auto tiempo_inicial = chrono::high_resolution_clock::now();
 
-    long int formas_FB = contarFormasFuerzaBruta(E, n, p);
+    long long int formas_FB = contarFormasFuerzaBruta(E, n, p);
 
     auto tiempo_final = chrono::high_resolution_clock::now();
 
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 
     // Mostrar el resultado
     cout << "NÚMERO DE FORMAS POSIBLES: " << formas_FB << endl;
-    cout << "TIEMPO DE EJECUCIÓN: " << tiempo_total << "[s]" << endl;
+    cout << "TIEMPO DE EJECUCIÓN: " << tiempo_total << " [s]" << endl;
 
     return 0;
 }
