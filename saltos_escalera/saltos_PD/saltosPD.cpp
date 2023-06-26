@@ -29,7 +29,7 @@ long long int contarFormasDinamica(int E[], int n, int p) {
 
 int main(int argc, char* argv[]) 
 {
-    srand(time(NULL));
+    //srand(time(NULL));
 
     int n = atoi(argv[1]);  // Número de escalones
     int r = atoi(argv[2]);  // Número de escalones rotos
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
         if (escalones_rotos.find(roto) == escalones_rotos.end())
         {
             escalones_rotos.insert(roto);
-            cout << "ESCALÓN N° "<< roto << " ROTO" << endl;
+            //cout << "ESCALÓN N° "<< roto << " ROTO" << endl;
             //cout << "Ingrese el escalón roto: ";
             //cin >> roto;
             E[roto] = -1;
@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
     double tiempo_total = duracion.count();
     
     // Mostrar el resultado
-    cout << "NÚMERO DE FORMAS POSIBLES:  " << formas_PD << endl;
+    cout << "NÚMERO DE FORMAS POSIBLES: " << formas_PD << endl;
     cout << "TIEMPO DE EJECUCIÓN: " << tiempo_total << " [s]" << endl;
     
     return 0;
