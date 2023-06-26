@@ -1,0 +1,13 @@
+digraph G {
+  0 [style=filled, fillcolor=skyblue, label="0"];
+  1 [shape=circle, style=filled, fillcolor=green, label="1"];
+  2 [shape=circle, style=filled, fillcolor=green, label="2"];
+  0 -> 1 [label="9"];
+  0 -> 2 [label="9"];
+  1 -> 0 [label="7"];
+  1 -> 2 [label="6"];
+  1 -> 1 [label="1"];
+  2 -> 0 [label="4"];
+  2 -> 1 [label="8"];
+  2 -> 2 [label="5"];
+}
