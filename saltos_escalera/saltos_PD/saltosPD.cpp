@@ -29,6 +29,11 @@ long long int contarFormasDinamica(int E[], int n, int p) {
 
 int main(int argc, char* argv[]) 
 {
+    if (argc != 4) {
+        fprintf(stderr, "Run as ./saltosPD n r p\n");
+        exit(EXIT_FAILURE);
+    }
+    
     srand(time(NULL));
 
     int n = atoi(argv[1]);  // Número de escalones
