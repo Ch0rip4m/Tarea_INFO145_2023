@@ -5,6 +5,7 @@
 #include <ctime>
 #include <unordered_set>
 #include <queue>
+#include <cmath>
 
 using namespace std;
 
@@ -98,41 +99,58 @@ int main(int argc, char* argv[]) {
     // Grafo ponderado de las ciudades representado como una lista de adyacencia
     vector<vector<Edge>> cityGraph(n); // El tamaño del grafo de ciudades es n
 
+    
+    int numIsleport = int(log2(m)); // Definir el número de islas capacitadas
+    cout << numIsleport << endl;
     // Grafo ponderado de las islas representado como una lista de adyacencia
     vector<vector<Edge>> islandGraph(m);
 
     // Generar k ciudades con puertos marítimos
     unordered_set<int> portCities;
     srand(time(nullptr));
+
+    int S = 0; // Nodo inicial
+
     while (portCities.size() < k) {
         int portCity = rand() % n;
-        portCities.insert(portCity);
+        if (portCity != S && portCities.count(portCity) == 0) { //VERIFICA NODO INICIAL Y NO CREAR CAMINO HACIA SÍ MISMO.
+            portCities.insert(portCity);
+        }
+        
     }
 
     // Agregar aristas aleatorias al grafo de las ciudades (dirigido)
     for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
+        int count = 0;
+        while (count < 2) { // Limitar a 2 aristas
+            int j = rand() % n;
             if (i != j) {
                 int weight = rand() % 10 + 1; // Peso aleatorio entre 1 y 10
                 cityGraph[i].push_back(Edge(j, weight));
+                ++count;
             }
         }
     }
 
-    // Conectar las ciudades con puertos marítimos a las otras ciudades
+    // Conectar los puertos marítimos a las otras ciudades
     for (int portCity : portCities) {
-        int weight = rand() % 10 + 1; // Peso aleatorio entre 1 y 10
-        cityGraph[portCity].push_back(Edge(portCity, weight)); // Conexión a sí mismo
+        for (int i = 0; i < n; ++i) {
+            if (i != portCity) {
+                int weight = rand() % 10 + 1; // Peso aleatorio entre 1 y 10
+                cityGraph[portCity].push_back(Edge(i, weight));
+            }
+        }
     }
 
     // Agregar aristas aleatorias para las islas
-    for (int i = 0; i < m; ++i) {
-        for (int j = i + 1; j < m; ++j) {
+    for (int i = 0; i < numIsleport; ++i) {
+        for (int j = i + 1; j < numIsleport; ++j) {
             int weight = rand() % 10 + 1; // Peso aleatorio entre 1 y 10
             islandGraph[i].push_back(Edge(j, weight));
             islandGraph[j].push_back(Edge(i, weight));
         }
-    }
+}
+
 
     // Realizar la búsqueda en anchura (BFS) para las islas
     vector<bool> islandVisited(m, false);
@@ -154,7 +172,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    int S = 0; // Nodo inicial
 
     int shortestDistance = DijkstraWithPorts(S, graph, portCities);
 
