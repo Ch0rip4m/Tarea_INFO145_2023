@@ -142,14 +142,32 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    // Generar islas con puertos marítimos
+    unordered_set<int> portIslands;
+    while (portIslands.size() < numIsleport) {
+        int portIsland = rand() % m;
+        portIslands.insert(portIsland);
+    }
+
     // Agregar aristas aleatorias para las islas
-    for (int i = 0; i < numIsleport; ++i) {
-        for (int j = i + 1; j < numIsleport; ++j) {
+    for (int i = 0; i < m; ++i) {
+        for (int j = i + 1; j < m; ++j) {
             int weight = rand() % 10 + 1; // Peso aleatorio entre 1 y 10
             islandGraph[i].push_back(Edge(j, weight));
             islandGraph[j].push_back(Edge(i, weight));
         }
-}
+    }
+
+    // Conectar los puertos marítimos de las islas a otras islas
+    for (int portIsland : portIslands) {
+        for (int i = 0; i < m; ++i) {
+            if (i != portIsland) {
+                int weight = rand() % 10 + 1; // Peso aleatorio entre 1 y 10
+                islandGraph[portIsland].push_back(Edge(i, weight));
+            }
+        }
+    }
+
 
 
     // Realizar la búsqueda en anchura (BFS) para las islas
