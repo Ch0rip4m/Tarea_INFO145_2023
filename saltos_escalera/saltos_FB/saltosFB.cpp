@@ -33,7 +33,11 @@ long long int contarFormasFuerzaBruta(int E[], int n, int p) {
 
 int main(int argc, char *argv[])
 {
-    //srand(time(NULL));
+    if (argc != 4) {
+        fprintf(stderr, "Run as ./saltosFB n r p\n");
+        exit(EXIT_FAILURE);
+    }
+    srand(time(NULL));
 
     int n = atoi(argv[1]); // Número de escalones
     int r = atoi(argv[2]); // Número de escalones rotos

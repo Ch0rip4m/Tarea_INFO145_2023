@@ -5,7 +5,7 @@
 #include <ctime>
 #include <unordered_set>
 #include <queue>
-#include <cmath>
+#include <fstream>
 
 using namespace std;
 
@@ -86,6 +86,33 @@ void BFSForIslands(int S, const vector<vector<Edge>>& graph, vector<bool>& visit
     }
 }
 
+// Función para generar el código DOT para visualizar el grafo con Graphviz
+string generateDotCode(const vector<vector<Edge>>& graph, const unordered_set<int>& portCities) {
+    string dotCode = "digraph G {\n";
+
+    int n = graph.size();
+
+    // Agregar nodos al código DOT
+    for (int i = 0; i < n; ++i) {
+        dotCode += "    " + to_string(i);
+        if (portCities.count(i) > 0) {
+            dotCode += " [shape=circle, style=filled, fillcolor=green]";
+        }
+        dotCode += ";\n";
+    }
+
+    // Agregar aristas al código DOT
+    for (int i = 0; i < n; ++i) {
+        for (const Edge& edge : graph[i]) {
+            dotCode += "    " + to_string(i) + " -> " + to_string(edge.to) + " [label=\"" + to_string(edge.weight) + "\"];\n";
+        }
+    }
+
+    dotCode += "}\n";
+
+    return dotCode;
+}
+
 int main(int argc, char* argv[]) {
     if (argc != 4) {
         cerr << "Run as ./grafos n k m" << endl;
@@ -99,9 +126,6 @@ int main(int argc, char* argv[]) {
     // Grafo ponderado de las ciudades representado como una lista de adyacencia
     vector<vector<Edge>> cityGraph(n); // El tamaño del grafo de ciudades es n
 
-    
-    int numIsleport = int(log2(m)); // Definir el número de islas capacitadas
-    cout << numIsleport << endl;
     // Grafo ponderado de las islas representado como una lista de adyacencia
     vector<vector<Edge>> islandGraph(m);
 
@@ -143,13 +167,13 @@ int main(int argc, char* argv[]) {
     }
 
     // Agregar aristas aleatorias para las islas
-    for (int i = 0; i < numIsleport; ++i) {
-        for (int j = i + 1; j < numIsleport; ++j) {
+    for (int i = 0; i < m; ++i) {
+        for (int j = i + 1; j < m; ++j) {
             int weight = rand() % 10 + 1; // Peso aleatorio entre 1 y 10
             islandGraph[i].push_back(Edge(j, weight));
             islandGraph[j].push_back(Edge(i, weight));
         }
-}
+    }
 
 
     // Realizar la búsqueda en anchura (BFS) para las islas
@@ -172,6 +196,18 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    // Generar el código DOT
+    string dotCode = generateDotCode(graph, portCities);
+
+    // Escribir el código DOT en un archivo
+    ofstream dotFile("graph.dot");
+    if (dotFile.is_open()) {
+        dotFile << dotCode;
+        dotFile.close();
+        cout << "DOT code written to graph.dot" << endl;
+    } else {
+        cerr << "Unable to write DOT code to file" << endl;
+    }
 
     int shortestDistance = DijkstraWithPorts(S, graph, portCities);
 
