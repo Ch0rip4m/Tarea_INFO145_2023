@@ -19,6 +19,18 @@ struct Edge {
     Edge(int to, int weight) : to(to), weight(weight) {}
 };
 
+
+// Función para calcular el coste de conexión entre una ciudad con puerto marítimo y un puerto de isla
+int costeBarco(int cityPort, int islandPort) {
+    // Generamos un coste aleatorio entre un rango determinado.
+    int minCost = -20; // Coste mínimo
+    int maxCost = 20; // Coste máximo
+
+    int cost = rand() % (maxCost - minCost + 1) + minCost;
+
+    return cost;
+}
+
 // Función para encontrar el camino más barato hacia alguna ciudad con puerto marítimo utilizando Dijkstra
 int DijkstraWithPorts(int S, const vector<vector<Edge>>& graph, const unordered_set<int>& portCities) {
     int n = graph.size();
@@ -149,12 +161,23 @@ int main(int argc, char* argv[]) {
         portIslands.insert(portIsland);
     }
 
+    int capitalZ = rand() % m; // Índice de la capital regional Z 
+
+
     // Agregar aristas aleatorias para las islas
     for (int i = 0; i < m; ++i) {
         for (int j = i + 1; j < m; ++j) {
             int weight = rand() % 10 + 1; // Peso aleatorio entre 1 y 10
             islandGraph[i].push_back(Edge(j, weight));
             islandGraph[j].push_back(Edge(i, weight));
+        }
+    
+
+    // Conectar cada ciudad con puerto marítimo a los puertos de la isla con costos aleatorios
+        for (int p : portCities) {
+            int weight = costeBarco(p, i);
+            cityGraph[p].push_back(Edge(n + i, weight));
+            islandGraph[i].push_back(Edge(p, weight));
         }
     }
 
@@ -178,8 +201,10 @@ int main(int argc, char* argv[]) {
         }
     }
 
+
+    
     // Fusionar los grafos de las ciudades y las islas
-    vector<vector<Edge>> graph(n + m);
+    vector<vector<Edge>> graph(n + m); // El tamaño del grafo ahora es n + m
     for (int i = 0; i < n; ++i) {
         graph[i] = cityGraph[i];
     }
@@ -188,7 +213,7 @@ int main(int argc, char* argv[]) {
             int adjustedTo = edge.to + n; // Ajustar los índices de las islas
             graph[i + n].push_back(Edge(adjustedTo, edge.weight));
         }
-    }
+}
 
 
     int shortestDistance = DijkstraWithPorts(S, graph, portCities);
