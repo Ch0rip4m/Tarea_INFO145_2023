@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
         if (escalones_rotos.find(roto) == escalones_rotos.end())
         {
             escalones_rotos.insert(roto);
-            cout << "ESCALÓN N° "<< roto << " ROTO" << endl;
+            //cout << "ESCALÓN N° "<< roto << " ROTO" << endl;
             //cout << "Ingrese el escalón roto: ";
             //cin >> roto;
             E[roto] = -1;
